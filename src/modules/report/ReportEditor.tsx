@@ -47,7 +47,7 @@ export function ReportEditor() {
             className={styles.input}
             value={report.location}
             onChange={(e) => setField('location', e.target.value)}
-            placeholder="Onde foi feito o ajuste — ex: Cozinha, ap. 302"
+            placeholder="Endereço ou nome do estabelecimento — ex: Rua das Flores, 123"
           />
         </label>
 
