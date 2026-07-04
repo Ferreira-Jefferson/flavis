@@ -12,7 +12,13 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
+      // 'prompt' (não 'autoUpdate'): o SW novo NÃO assume sozinho nem apaga o
+      // cache por baixo de uma aba aberta — assim ela continua conseguindo
+      // carregar seus chunks (ex: o PDF sob demanda) mesmo após um deploy novo.
+      // A troca de versão é feita pelo aviso "Atualizar" (ver shared/pwa).
+      registerType: 'prompt',
+      // Registramos o SW manualmente em src/main.tsx para controlar o aviso.
+      injectRegister: null,
       includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
       manifest: {
         name: 'flaves — antes & depois',

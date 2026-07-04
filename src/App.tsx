@@ -1,9 +1,11 @@
 import { ReportEditor } from '@/modules/report/ReportEditor'
 import { ThemePicker } from '@/shared/ui/ThemePicker'
+import { UpdateBanner } from '@/shared/ui/UpdateBanner'
 
 export function App() {
   return (
     <div className="app">
+      <UpdateBanner />
       <header className="appHeader">
         <div className="brand">
           <svg className="brandMark" viewBox="0 0 512 512" aria-hidden="true">

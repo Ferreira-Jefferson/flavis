@@ -1,0 +1,36 @@
+.banner {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: calc(100vw - 32px);
+  padding: 8px 8px 8px 16px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 999px;
+  box-shadow: 0 6px 20px rgba(23, 24, 26, 0.22);
+  font-size: 14px;
+}
+
+.text {
+  white-space: nowrap;
+}
+
+.button {
+  border: 0;
+  background: #fff;
+  color: var(--accent);
+  font: inherit;
+  font-weight: 600;
+  padding: 7px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.button:hover {
+  opacity: 0.92;
+}

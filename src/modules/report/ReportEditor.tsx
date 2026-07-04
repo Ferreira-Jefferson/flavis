@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { isModuleLoadError, markNeedRefresh } from '@/shared/pwa/updatePrompt'
 import { useTheme } from '@/shared/ui/useTheme'
 import { type Side } from './domain'
 import { useReport } from './useReport'
@@ -22,7 +23,14 @@ export function ReportEditor() {
       await downloadReportPdf(report, palette)
     } catch (err) {
       console.error(err)
-      alert('Não foi possível gerar o PDF. Tente novamente.')
+      if (isModuleLoadError(err)) {
+        // Chunk do PDF ficou desatualizado após um deploy novo: mostra o aviso
+        // de atualização (recarregar resolve) em vez de um erro genérico.
+        markNeedRefresh()
+        alert('Uma nova versão do app foi publicada. Toque em "Atualizar" e baixe o PDF de novo.')
+      } else {
+        alert('Não foi possível gerar o PDF. Tente novamente.')
+      }
     } finally {
       setGenerating(false)
     }
