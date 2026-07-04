@@ -279,4 +279,17 @@
     grid-template-columns: 1fr;
     gap: 16px;
   }
+  /* Placeholders longos (Título/Local) cabem melhor com fonte menor no celular;
+     o texto digitado permanece no tamanho normal. */
+  .input::placeholder,
+  .textarea::placeholder {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 400px) {
+  .input::placeholder,
+  .textarea::placeholder {
+    font-size: 11px;
+  }
 }
