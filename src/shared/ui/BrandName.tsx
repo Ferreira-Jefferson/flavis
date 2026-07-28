@@ -1,28 +1,54 @@
-import { brandMaxLength } from './brand'
+import { useLayoutEffect, useRef, useState } from 'react'
+import { appName, brandMaxLength } from './brand'
 import { useBrand } from './useBrand'
 import styles from './brandName.module.css'
 
-const PLACEHOLDER = 'Seu nome'
-
-// Nome do logo, editável no lugar. Vazio = nenhum nome em lugar nenhum
-// (o texto de dica é só placeholder e não vai para o PDF).
+// Logo em texto: mostra o nome do app e, ao clicar, vira campo de edição.
+// Sair do campo sem digitar nada volta ao nome do app; digitando, o nome do
+// usuário passa a valer aqui e no PDF.
 export function BrandName() {
-  const { brand, setBrand, commitBrand } = useBrand()
+  const { brand, setBrand } = useBrand()
+  const [draft, setDraft] = useState<string | null>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const editing = draft !== null
+
+  useLayoutEffect(() => {
+    if (editing) inputRef.current?.select()
+  }, [editing])
+
+  if (!editing) {
+    return (
+      <button
+        type="button"
+        className={styles.display}
+        title="Clique para editar o nome que aparece no PDF"
+        onClick={() => setDraft(brand)}
+      >
+        {brand || appName}
+      </button>
+    )
+  }
+
   return (
-    <span className={styles.wrap} data-value={brand || PLACEHOLDER}>
+    <span className={styles.wrap} data-value={draft || appName}>
       <input
+        ref={inputRef}
         className={styles.input}
-        value={brand}
+        value={draft}
         maxLength={brandMaxLength}
-        placeholder={PLACEHOLDER}
+        placeholder={appName}
         aria-label="Nome exibido no logo e no PDF"
-        title="Edite o nome que aparece no PDF"
         spellCheck={false}
         autoComplete="off"
-        onChange={(e) => setBrand(e.target.value)}
-        onBlur={commitBrand}
+        onChange={(e) => setDraft(e.target.value)}
+        onBlur={() => {
+          setBrand(draft)
+          setDraft(null)
+        }}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === 'Escape') e.currentTarget.blur()
+          // Esc descarta a edição; Enter confirma (pelo blur).
+          if (e.key === 'Escape') setDraft(null)
+          else if (e.key === 'Enter') e.currentTarget.blur()
         }}
       />
     </span>

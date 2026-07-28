@@ -1,5 +1,22 @@
-/* Campo que se comporta como texto: o ::after (cópia invisível do conteúdo)
-   ocupa a mesma célula do grid e dá ao input a largura exata do nome. */
+/* Botão que parece texto: é o logo em repouso, clicável para editar. */
+.display {
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  padding: 0 2px;
+  border: 0;
+  border-bottom: 1px dashed transparent;
+  border-radius: 0;
+  background: none;
+  cursor: text;
+}
+
+.display:hover {
+  border-bottom-color: var(--line);
+}
+
+/* Em edição: o ::after (cópia invisível do conteúdo) ocupa a mesma célula do
+   grid e dá ao input a largura exata do texto digitado. */
 .wrap {
   display: inline-grid;
   max-width: min(70vw, 420px);
@@ -22,29 +39,18 @@
 .input {
   min-width: 2ch;
   border: 0;
-  border-bottom: 1px dashed transparent;
+  border-bottom: 1px dashed var(--accent);
   border-radius: 0;
   background: none;
   color: inherit;
   text-align: center;
-  cursor: text;
 }
 
 .input::placeholder {
   color: var(--stone);
-  font-style: italic;
   opacity: 1;
-}
-
-.input:hover {
-  border-bottom-color: var(--line);
 }
 
 .input:focus {
   outline: none;
-  border-bottom-color: var(--accent);
-}
-
-.input:placeholder-shown {
-  border-bottom-color: var(--line);
 }

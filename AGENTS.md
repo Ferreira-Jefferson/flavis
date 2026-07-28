@@ -23,8 +23,8 @@ src/
 ├── index.css                 ← reset + tokens (CSS vars) + shell
 ├── shared/                   ← camada comum (especialistas, sem regra de feature)
 │   ├── ui/tokens.ts          ← tokens de design (cor/tipo/espaço) — usados por app E pdf
-│   ├── ui/brand.ts           ← nome do logo escrito pelo usuário (store + localStorage)
-│   ├── ui/BrandName.tsx      ← logo editável no lugar (vazio = nenhum nome no sistema)
+│   ├── ui/brand.ts           ← nome do logo: padrão do app + o que o usuário escrever
+│   ├── ui/BrandName.tsx      ← logo clicável que vira campo de edição
 │   └── image/resize.ts       ← redimensiona/comprime imagem no navegador
 └── modules/
     └── report/               ← ÚNICA feature: montar e exportar o relatório
@@ -45,9 +45,10 @@ src/
 
 - `shared/ui/tokens.ts` — fonte única de cor/tipografia/espaçamento.
 - `shared/image/resize.ts` — `resizeImageFile(file)` → imagem reduzida (JPEG) pronta pro PDF.
-- `shared/ui/brand.ts` / `useBrand.ts` — nome da marca. O app **não tem nome próprio na
-  interface**: o logo é um campo editável e, enquanto estiver vazio, nenhum nome aparece
-  na tela, no título da aba, no PDF ou no nome do arquivo baixado.
+- `shared/ui/brand.ts` / `useBrand.ts` — nome da marca. O logo mostra `flavis` por padrão
+  e vira campo de edição ao clique; sair sem digitar volta ao padrão. Com um nome escrito,
+  ele substitui o logo, o título da aba, o rodapé/autor do PDF e prefixa o arquivo baixado.
+  **Sem nome escrito, o PDF não leva nome nenhum** — `flavis` fica só na interface.
 
 ## Regras de fronteira (verificadas por `npm run lint`)
 
