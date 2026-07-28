@@ -4,7 +4,9 @@
 
 import { defaultThemeId, themes, type Palette, type Theme, type ThemeId } from './tokens'
 
-const STORAGE_KEY = 'flavis.theme'
+const STORAGE_KEY = 'ui.theme'
+// Chave usada antes de o app deixar de ter nome próprio — lida só para migrar.
+const LEGACY_STORAGE_KEY = 'flavis.theme'
 
 const VAR_BY_KEY: Record<keyof Palette, string> = {
   ink: '--ink',
@@ -18,7 +20,7 @@ const VAR_BY_KEY: Record<keyof Palette, string> = {
 
 function readStored(): ThemeId {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY)
+    const saved = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY)
     if (saved && themes.some((t) => t.id === saved)) return saved as ThemeId
   } catch {
     // localStorage indisponível (ex: modo privado) — cai no padrão
@@ -55,6 +57,7 @@ export function setThemeId(id: ThemeId): void {
   currentId = id
   try {
     localStorage.setItem(STORAGE_KEY, id)
+    localStorage.removeItem(LEGACY_STORAGE_KEY)
   } catch {
     // ignora falha de escrita (modo privado)
   }

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { isModuleLoadError, markNeedRefresh } from '@/shared/pwa/updatePrompt'
+import { useBrand } from '@/shared/ui/useBrand'
 import { useTheme } from '@/shared/ui/useTheme'
 import { type Side } from './domain'
 import { useReport } from './useReport'
@@ -10,6 +11,7 @@ export function ReportEditor() {
   const { report, busy, setField, addBlock, removeBlock, setBlockLabel, addImages, removeImage } =
     useReport()
   const { palette } = useTheme()
+  const { brand } = useBrand()
   const [generating, setGenerating] = useState(false)
 
   const hasImages = report.blocks.some((b) => b.before.length > 0 || b.after.length > 0)
@@ -20,7 +22,7 @@ export function ReportEditor() {
     try {
       // carrega o @react-pdf sob demanda (mantém o carregamento inicial leve)
       const { downloadReportPdf } = await import('./pdf/generate')
-      await downloadReportPdf(report, palette)
+      await downloadReportPdf(report, palette, brand)
     } catch (err) {
       console.error(err)
       if (isModuleLoadError(err)) {

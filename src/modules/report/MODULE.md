@@ -6,7 +6,9 @@
 ## Entry points
 
 - `ReportEditor.tsx` — tela completa (usada por `App.tsx`).
-- `pdf/generate.tsx` — `downloadReportPdf(report)` monta o PDF e dispara o download.
+- `pdf/generate.tsx` — `downloadReportPdf(report, palette, brand)` monta o PDF e dispara o download.
+  `brand` é o nome que o usuário escreveu no logo; vazio = o PDF sai sem nome nenhum
+  (rodapé só com "antes & depois", sem autor e sem prefixo no arquivo).
 
 ## Estrutura
 
@@ -20,6 +22,7 @@
 
 - `shared/image/resize.ts` — reduz cada foto antes de guardar no estado / PDF.
 - `shared/ui/tokens.ts` — cores/tipografia (compartilhadas com o PDF).
+- `shared/ui/useBrand.ts` — nome da marca definido pelo usuário, carimbado no PDF.
 
 ## Contratos / dados
 

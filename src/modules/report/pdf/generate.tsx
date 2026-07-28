@@ -5,26 +5,37 @@ import { ReportDocument } from './ReportDocument'
 
 const DIACRITICS = new RegExp('[\\u0300-\\u036f]', 'g')
 
-function fileName(report: Report): string {
-  const slug =
-    report.title
-      .trim()
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(DIACRITICS, '')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '')
-      .slice(0, 60) || 'relatorio'
-  return `flavis-${slug}.pdf`
+function slugify(value: string, max: number): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(DIACRITICS, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, max)
+}
+
+// Prefixa com o nome do usuário só quando ele definiu um — sem nome, nenhum prefixo.
+function fileName(report: Report, brand: string): string {
+  const slug = slugify(report.title, 60) || 'relatorio'
+  const prefix = slugify(brand, 30)
+  return prefix ? `${prefix}-${slug}.pdf` : `${slug}.pdf`
 }
 
 // Gera o PDF no navegador e dispara o download.
-export async function downloadReportPdf(report: Report, palette: Palette): Promise<void> {
-  const blob = await pdf(<ReportDocument report={report} palette={palette} />).toBlob()
+export async function downloadReportPdf(
+  report: Report,
+  palette: Palette,
+  brand = '',
+): Promise<void> {
+  const blob = await pdf(
+    <ReportDocument report={report} palette={palette} brand={brand} />,
+  ).toBlob()
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url
-  link.download = fileName(report)
+  link.download = fileName(report, brand)
   document.body.appendChild(link)
   link.click()
   link.remove()

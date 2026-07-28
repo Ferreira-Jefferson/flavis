@@ -1,4 +1,5 @@
 import { ReportEditor } from '@/modules/report/ReportEditor'
+import { BrandName } from '@/shared/ui/BrandName'
 import { ThemePicker } from '@/shared/ui/ThemePicker'
 import { UpdateBanner } from '@/shared/ui/UpdateBanner'
 
@@ -22,7 +23,7 @@ export function App() {
             />
             <rect x="246" y="150" width="20" height="212" fill="#FFFFFF" opacity="0.9" />
           </svg>
-          flavis
+          <BrandName />
         </div>
         <p className="tagline">Relatórios de antes &amp; depois</p>
         <div className="headerActions">
