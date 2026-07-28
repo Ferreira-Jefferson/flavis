@@ -1,7 +1,7 @@
 // Fonte única de verdade do design (usada pela UI e pelo PDF).
 // Direção: portfólio editorial, cromia quase-monocromática — as fotos trazem a cor.
-// O usuário escolhe entre 5 temas pastel-claros; o acento tinge a marca, o rótulo
-// "DEPOIS" e os estados ativos, tanto na tela quanto no PDF.
+// O usuário escolhe entre um tema sem cor (grafite) e temas pastel-claros; o acento
+// tinge a marca, o rótulo "DEPOIS" e os estados ativos, tanto na tela quanto no PDF.
 
 export interface Palette {
   ink: string // texto primário (quase-preto quente)
@@ -20,15 +20,22 @@ const neutrals = {
   card: '#FFFFFF',
 } as const
 
-export type ThemeId = 'eucalipto' | 'nevoa' | 'argila' | 'lavanda' | 'trigo' | 'rose'
+export type ThemeId = 'neutro' | 'eucalipto' | 'nevoa' | 'argila' | 'lavanda' | 'trigo' | 'rose'
 
 export interface Theme {
   id: ThemeId
   label: string
   palette: Palette
+  neutral?: boolean // sem matiz: a amostra no seletor recebe tratamento próprio
 }
 
 export const themes: readonly Theme[] = [
+  {
+    id: 'neutro',
+    label: 'Sem cor',
+    neutral: true,
+    palette: { ...neutrals, paper: '#F4F4F3', line: '#E0E0DE', accent: '#3D3E40', accentWeak: '#EAEAE8' },
+  },
   {
     id: 'eucalipto',
     label: 'Eucalipto',
@@ -64,7 +71,8 @@ export const themes: readonly Theme[] = [
 export const defaultThemeId: ThemeId = 'eucalipto'
 
 // Retrocompatibilidade: `color` é a paleta padrão (usada como fallback do PDF).
-export const color: Palette = themes[0].palette
+export const color: Palette =
+  themes.find((t) => t.id === defaultThemeId)?.palette ?? themes[0].palette
 
 export const font = {
   display: 'Cormorant', // títulos e rótulos de bloco

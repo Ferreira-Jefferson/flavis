@@ -3,7 +3,8 @@ import { themes } from './tokens'
 import { useTheme } from './useTheme'
 import styles from './themePicker.module.css'
 
-// Seletor de cor do tema: 5 amostras pastel. Trocar aqui muda a página e o PDF.
+// Seletor de cor do tema: uma amostra sem cor + amostras pastel.
+// Trocar aqui muda a página e o PDF.
 export function ThemePicker() {
   const { themeId, setTheme } = useTheme()
   return (
@@ -16,7 +17,9 @@ export function ThemePicker() {
           aria-checked={t.id === themeId}
           aria-label={t.label}
           title={t.label}
-          className={t.id === themeId ? `${styles.swatch} ${styles.active}` : styles.swatch}
+          className={[styles.swatch, t.neutral && styles.none, t.id === themeId && styles.active]
+            .filter(Boolean)
+            .join(' ')}
           style={{ '--sw': t.palette.accent } as CSSProperties}
           onClick={() => setTheme(t.id)}
         />
