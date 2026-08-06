@@ -1,13 +1,13 @@
 import { useLayoutEffect, useRef, useState } from 'react'
-import { appName, brandMaxLength } from './brand'
-import { useBrand } from './useBrand'
+import { nameMaxLength } from '../identity/company'
+import { useCompany } from '../identity/useCompany'
 import styles from './brandName.module.css'
 
-// Logo em texto: mostra o nome do app e, ao clicar, vira campo de edição.
-// Sair do campo sem digitar nada volta ao nome do app; digitando, o nome do
-// usuário passa a valer aqui e no PDF.
+// Nome da empresa exibido no cabeçalho: clicar vira campo de edição.
+// O padrão vem preenchido (SF Higienizações); sair do campo em branco mantém
+// o valor anterior — o orçamento sempre carrega algum nome de empresa.
 export function BrandName() {
-  const { brand, setBrand } = useBrand()
+  const { company, setCompany } = useCompany()
   const [draft, setDraft] = useState<string | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const editing = draft !== null
@@ -21,28 +21,29 @@ export function BrandName() {
       <button
         type="button"
         className={styles.display}
-        title="Clique para editar o nome que aparece no PDF"
-        onClick={() => setDraft(brand)}
+        title="Clique para editar o nome que aparece no orçamento"
+        onClick={() => setDraft(company.name)}
       >
-        {brand || appName}
+        {company.name}
       </button>
     )
   }
 
   return (
-    <span className={styles.wrap} data-value={draft || appName}>
+    <span className={styles.wrap} data-value={draft || company.name}>
       <input
         ref={inputRef}
         className={styles.input}
         value={draft}
-        maxLength={brandMaxLength}
-        placeholder={appName}
-        aria-label="Nome exibido no logo e no PDF"
+        maxLength={nameMaxLength}
+        placeholder={company.name}
+        aria-label="Nome da empresa exibido no orçamento"
         spellCheck={false}
         autoComplete="off"
         onChange={(e) => setDraft(e.target.value)}
         onBlur={() => {
-          setBrand(draft)
+          const trimmed = draft.trim()
+          if (trimmed) setCompany({ name: trimmed })
           setDraft(null)
         }}
         onKeyDown={(e) => {

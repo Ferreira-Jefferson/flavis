@@ -16,6 +16,12 @@ const VAR_BY_KEY: Record<keyof Palette, string> = {
   line: '--line',
   accent: '--accent',
   accentWeak: '--accent-weak',
+  brand: '--brand',
+  brandSoft: '--brand-soft',
+  panel: '--panel',
+  grid: '--grid',
+  positive: '--positive',
+  body: '--body',
 }
 
 function readStored(): ThemeId {
