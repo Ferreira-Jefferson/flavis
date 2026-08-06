@@ -36,6 +36,23 @@ export interface Block {
   after: ImageAsset[]
 }
 
+// Unidades de medida da coluna "UN." da tabela. Rótulos curtos de propósito: a
+// coluna tem 31pt no PDF (geometry.ts), ~4 caracteres a 9pt. `unit` continua
+// `string` (não a união) para não invalidar orçamentos com unidade fora da lista.
+export const UNIT_OPTIONS: readonly string[] = [
+  'un.',
+  'serv.',
+  'pç',
+  'm²',
+  'm',
+  'kg',
+  'g',
+  'L',
+  'h',
+  'dia',
+  'mês',
+]
+
 export interface ServiceItem {
   id: string
   description: string

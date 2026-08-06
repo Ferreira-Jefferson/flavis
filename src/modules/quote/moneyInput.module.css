@@ -1,0 +1,32 @@
+/* O "R$" vive fora do <input> (span), então nunca é apagado/substituído ao
+   digitar. O `className` recebido (quote.module.css .input) desenha a caixa;
+   aqui só transformamos essa caixa em flex e neutralizamos o input interno. */
+.wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wrap:focus-within {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-weak);
+}
+
+.prefix {
+  color: var(--stone);
+  font-weight: 600;
+  user-select: none;
+  flex: none;
+}
+
+.field {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  outline: none;
+}

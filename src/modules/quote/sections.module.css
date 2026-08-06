@@ -91,6 +91,14 @@
   gap: 14px;
 }
 
+/* Primeiro e último campo ocupam a linha inteira (Nome/Cidade em Company,
+   Número/Válido até em QuoteMeta). Antes vinha de uma regra `.field` global em
+   quote.module.css, que vazava para o `.itemGrid` e quebrava a linha de 4. */
+.companyGrid > :first-child,
+.companyGrid > :last-child {
+  grid-column: 1 / -1;
+}
+
 .logoRow {
   display: flex;
   align-items: center;
@@ -122,19 +130,29 @@
   gap: 10px;
 }
 
+/* Proporções das colunas QTD · UN. · VL. UNIT. · VL. TOTAL da tabela do PDF
+   (34 · 31 · 85 · 96 pt em pdf/geometry.ts), para a edição espelhar a saída. */
 .itemGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 0.5fr 0.5fr 1.1fr 1.2fr;
   gap: 10px;
+  align-items: end;
 }
 
-.derived {
-  font-size: 13px;
-  color: var(--stone);
-}
-
-.derived strong {
+/* Valor unitário: derivado do total (nunca editável), então tem a caixa dos
+   inputs mas com borda tracejada e fundo apagado para não parecer campo. */
+.derivedValue {
+  font-size: 15px;
+  font-weight: 600;
   color: var(--brand, var(--ink));
+  background: var(--panel);
+  border: 1px dashed var(--line);
+  border-radius: var(--r-sm);
+  padding: 10px 12px;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ---- Totals ---- */
@@ -193,8 +211,12 @@
 
 /* ---- Responsivo ---- */
 @media (max-width: 640px) {
-  .companyGrid,
-  .itemGrid {
+  .companyGrid {
     grid-template-columns: 1fr;
+  }
+
+  /* Qtd/Un. dividem a primeira linha; os dois valores ficam abaixo. */
+  .itemGrid {
+    grid-template-columns: 1fr 1fr;
   }
 }

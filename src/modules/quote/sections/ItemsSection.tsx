@@ -1,5 +1,5 @@
-import { type ServiceItem, unitPriceCents } from '../domain'
-import { formatBRL, formatQty } from '@/shared/money/currency'
+import { type ServiceItem, UNIT_OPTIONS, unitPriceCents } from '../domain'
+import { formatBRL } from '@/shared/money/currency'
 import { MoneyInput } from '../MoneyInput'
 import styles from '../sections.module.css'
 import quoteStyles from '../quote.module.css'
@@ -9,6 +9,13 @@ interface Props {
   onAdd: () => void
   onRemove: (id: string) => void
   onUpdate: (id: string, patch: Partial<Omit<ServiceItem, 'id'>>) => void
+}
+
+// Unidade fora da lista (orçamento antigo, texto digitado à mão) entra como
+// opção extra — senão o <select> renderizaria vazio e perderia o valor no
+// primeiro onChange.
+function unitChoices(current: string): readonly string[] {
+  return UNIT_OPTIONS.includes(current) ? UNIT_OPTIONS : [current, ...UNIT_OPTIONS]
 }
 
 // CRUD dos itens de serviço. O preço unitário é sempre derivado do total
@@ -45,9 +52,10 @@ export function ItemsSection({ items, onAdd, onRemove, onUpdate }: Props) {
               />
             </label>
 
+            {/* Mesma ordem das colunas do PDF: QTD · UN. · VL. UNIT. · VL. TOTAL. */}
             <div className={styles.itemGrid}>
               <label className={quoteStyles.field}>
-                <span className={quoteStyles.fieldLabel}>Quantidade</span>
+                <span className={quoteStyles.fieldLabel}>Qtd</span>
                 <input
                   type="number"
                   min={0}
@@ -58,30 +66,33 @@ export function ItemsSection({ items, onAdd, onRemove, onUpdate }: Props) {
                 />
               </label>
               <label className={quoteStyles.field}>
-                <span className={quoteStyles.fieldLabel}>Unidade</span>
-                <input
-                  className={quoteStyles.input}
+                <span className={quoteStyles.fieldLabel}>Un.</span>
+                <select
+                  className={quoteStyles.select}
                   value={item.unit}
                   onChange={(e) => onUpdate(item.id, { unit: e.target.value })}
-                />
+                >
+                  {unitChoices(item.unit).map((unit) => (
+                    <option key={unit} value={unit}>
+                      {unit}
+                    </option>
+                  ))}
+                </select>
               </label>
+              <div className={quoteStyles.field}>
+                <span className={quoteStyles.fieldLabel}>Vl. unit.</span>
+                <output className={styles.derivedValue} data-role="unit-price">
+                  {formatBRL(unitPriceCents(item.quantity, item.totalCents))}
+                </output>
+              </div>
               <label className={quoteStyles.field}>
-                <span className={quoteStyles.fieldLabel}>Valor total</span>
+                <span className={quoteStyles.fieldLabel}>Vl. total</span>
                 <MoneyInput
                   className={quoteStyles.input}
                   cents={item.totalCents}
                   onChange={(totalCents) => onUpdate(item.id, { totalCents })}
                 />
               </label>
-              <div className={quoteStyles.field}>
-                <span className={quoteStyles.fieldLabel}>Valor unitário</span>
-                <span className={styles.derived}>
-                  <strong data-role="unit-price">
-                    {formatBRL(unitPriceCents(item.quantity, item.totalCents))}
-                  </strong>{' '}
-                  para {formatQty(item.quantity)} {item.unit}
-                </span>
-              </div>
             </div>
 
             {canRemove && (

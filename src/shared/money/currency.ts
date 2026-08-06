@@ -8,13 +8,20 @@ function groupThousands(digits: string): string {
   return digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 }
 
-export function formatBRL(cents: number): string {
+// Só o número ("4.500,00"), sem o símbolo — o MoneyInput fixa o "R$" fora do
+// campo, então o valor editável não pode carregar o prefixo.
+export function formatAmount(cents: number): string {
   const rounded = Math.round(cents)
   const sign = rounded < 0 ? '-' : ''
   const abs = Math.abs(rounded)
   const intPart = Math.floor(abs / 100)
   const centPart = abs % 100
-  return `${sign}R$ ${groupThousands(String(intPart))},${String(centPart).padStart(2, '0')}`
+  return `${sign}${groupThousands(String(intPart))},${String(centPart).padStart(2, '0')}`
+}
+
+export function formatBRL(cents: number): string {
+  const amount = formatAmount(cents)
+  return amount.startsWith('-') ? `-R$ ${amount.slice(1)}` : `R$ ${amount}`
 }
 
 // Aceita "R$ 4.500,00", "4500,00", "4500.00" ou "4500" (reais inteiros).
