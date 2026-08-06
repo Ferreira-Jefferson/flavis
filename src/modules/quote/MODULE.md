@@ -28,6 +28,8 @@ app.
 - `QuoteEditor.tsx` → `sections/*.tsx` (`ModeSection`, `CompanySection`, `QuoteMetaSection`,
   `ItemsSection`, `TotalsSection`, `NotesSection`, `PhotosSection`) → `BlockEditor.tsx` →
   `ImageSlots.tsx` — UI em níveis.
+- `MoneyInput.tsx` — input de valor em reais, formata só no blur (evita corromper a vírgula
+  decimal ao digitar).
 - `quote.module.css`, `sections.module.css` — estilos co-locados.
 - `pdf/` — `geometry.ts` (constantes de layout em pt, medidas da referência),
   `QuoteDocument.tsx` (composição das partes), `parts/*.tsx` (`Header`, `InfoCard`,

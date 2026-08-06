@@ -1,6 +1,7 @@
 import { type Quote, grandTotal, subtotal } from '../domain'
 import { extenso } from '@/shared/text/extenso'
-import { formatBRL, parseBRL } from '@/shared/money/currency'
+import { formatBRL } from '@/shared/money/currency'
+import { MoneyInput } from '../MoneyInput'
 import styles from '../sections.module.css'
 import quoteStyles from '../quote.module.css'
 
@@ -30,11 +31,11 @@ export function TotalsSection({ quote, onDiscountChange }: Props) {
           <label className={quoteStyles.fieldLabel} htmlFor="quote-discount">
             Desconto
           </label>
-          <input
+          <MoneyInput
             id="quote-discount"
             className={quoteStyles.input}
-            value={formatBRL(quote.discountCents)}
-            onChange={(e) => onDiscountChange(parseBRL(e.target.value))}
+            cents={quote.discountCents}
+            onChange={onDiscountChange}
           />
         </div>
 

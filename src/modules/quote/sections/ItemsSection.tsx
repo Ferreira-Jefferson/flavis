@@ -1,5 +1,6 @@
 import { type ServiceItem, unitPriceCents } from '../domain'
-import { formatBRL, formatQty, parseBRL } from '@/shared/money/currency'
+import { formatBRL, formatQty } from '@/shared/money/currency'
+import { MoneyInput } from '../MoneyInput'
 import styles from '../sections.module.css'
 import quoteStyles from '../quote.module.css'
 
@@ -66,10 +67,10 @@ export function ItemsSection({ items, onAdd, onRemove, onUpdate }: Props) {
               </label>
               <label className={quoteStyles.field}>
                 <span className={quoteStyles.fieldLabel}>Valor total</span>
-                <input
+                <MoneyInput
                   className={quoteStyles.input}
-                  value={formatBRL(item.totalCents)}
-                  onChange={(e) => onUpdate(item.id, { totalCents: parseBRL(e.target.value) })}
+                  cents={item.totalCents}
+                  onChange={(totalCents) => onUpdate(item.id, { totalCents })}
                 />
               </label>
               <div className={quoteStyles.field}>
