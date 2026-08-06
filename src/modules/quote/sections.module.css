@@ -31,15 +31,14 @@
   background: var(--accent);
 }
 
-/* ---- Mode ---- */
-.modeToggle,
+/* ---- Placement (fotos) ---- */
 .placementGroup {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-.modeOption {
+.placementOption {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -51,14 +50,9 @@
   cursor: pointer;
 }
 
-.modeOption:has(input:checked) {
+.placementOption:has(input:checked) {
   border-color: var(--accent);
   background: var(--accent-weak);
-}
-
-.placementGroup {
-  padding-top: 6px;
-  border-top: 1px dashed var(--line);
 }
 
 /* ---- Company (recolhível) ---- */
@@ -207,6 +201,11 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
+}
+
+.photosDisabled {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 /* ---- Responsivo ---- */
