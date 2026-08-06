@@ -1,0 +1,200 @@
+/* Estilos próprios das 7 seções do editor de orçamento (`quote.module.css` cobre
+   o shell/casca do editor e os estilos reaproveitados de bloco/imagem antes-depois). */
+
+.section {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sectionTitle::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 16px;
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+/* ---- Mode ---- */
+.modeToggle,
+.placementGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.modeOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.modeOption:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--accent-weak);
+}
+
+.placementGroup {
+  padding-top: 6px;
+  border-top: 1px dashed var(--line);
+}
+
+/* ---- Company (recolhível) ---- */
+.companyHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.companyToggle {
+  border: none;
+  background: none;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.companyBody {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.companyGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.logoRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logoPreview {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+  object-fit: cover;
+  background: var(--panel);
+}
+
+/* ---- Items ---- */
+.itemsList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.itemCard {
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.itemGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.derived {
+  font-size: 13px;
+  color: var(--stone);
+}
+
+.derived strong {
+  color: var(--brand, var(--ink));
+}
+
+/* ---- Totals ---- */
+.totalsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.totalsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  background: var(--panel);
+}
+
+.totalsRow.grandTotal {
+  background: var(--brand, var(--accent));
+  color: #fff;
+  font-weight: 700;
+}
+
+.extenso {
+  margin: 0;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--body, var(--stone));
+}
+
+/* ---- Notes ---- */
+.notesList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.noteRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.noteRow input {
+  flex: 1;
+}
+
+/* ---- Photos ---- */
+.photos {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ---- Responsivo ---- */
+@media (max-width: 640px) {
+  .companyGrid,
+  .itemGrid {
+    grid-template-columns: 1fr;
+  }
+}
