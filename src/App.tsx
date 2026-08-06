@@ -1,9 +1,10 @@
 import { QuoteEditor } from '@/modules/quote/QuoteEditor'
+import { useCompany } from '@/shared/identity/useCompany'
 import { BrandName } from '@/shared/ui/BrandName'
-import { ThemePicker } from '@/shared/ui/ThemePicker'
 import { UpdateBanner } from '@/shared/ui/UpdateBanner'
 
 export function App() {
+  const { company } = useCompany()
   return (
     <div className="app">
       <UpdateBanner />
@@ -25,10 +26,7 @@ export function App() {
           </svg>
           <BrandName />
         </div>
-        <p className="tagline">Orçamentos profissionais, com ou sem registro fotográfico</p>
-        <div className="headerActions">
-          <ThemePicker />
-        </div>
+        {company.tagline && <p className="tagline">{company.tagline}</p>}
       </header>
       <main className="appMain">
         <QuoteEditor />

@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { type Company, defaultLogoUrl, nameMaxLength } from '@/shared/identity/company'
+import { type Company, appFallbackName, defaultLogoUrl, nameMaxLength } from '@/shared/identity/company'
 import styles from '../sections.module.css'
 import quoteStyles from '../quote.module.css'
 
@@ -68,6 +68,7 @@ export function CompanySection({ company, onChange, onLogoFile, busy }: Props) {
                 className={quoteStyles.input}
                 value={company.name}
                 maxLength={nameMaxLength}
+                placeholder={appFallbackName}
                 onChange={(e) => onChange({ name: e.target.value })}
               />
             </label>

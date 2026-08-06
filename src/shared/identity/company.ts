@@ -7,6 +7,9 @@ const STORAGE_KEY = 'company'
 
 export const nameMaxLength = 60
 
+// Nome exibido quando a empresa ainda não tem nome próprio (name vazio).
+export const appFallbackName = 'flavis'
+
 // Asset padrão embutido (logo extraído do PDF de referência). `logoDataUrl`
 // null significa "usa este arquivo" — só passa a ter valor quando o usuário
 // faz upload do próprio logo.
@@ -63,7 +66,9 @@ export function getCompany(): Company {
 
 export function setCompany(patch: Partial<Company>): void {
   const next: Company = { ...current, ...patch }
-  if (typeof patch.name === 'string') next.name = sanitizeName(patch.name) || current.name
+  // Nome pode ficar vazio (a UI cai para "flavis" e bloqueia a geração do PDF
+  // até a identidade ser preenchida — ver BrandName.tsx/QuoteEditor.tsx).
+  if (typeof patch.name === 'string') next.name = sanitizeName(patch.name)
   if (JSON.stringify(next) === JSON.stringify(current)) return
   current = next
   persist(next)

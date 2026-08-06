@@ -1,56 +1,5 @@
-/* Botão que parece texto: é o logo em repouso, clicável para editar. */
 .display {
   font: inherit;
   letter-spacing: inherit;
   color: inherit;
-  padding: 0 2px;
-  border: 0;
-  border-bottom: 1px dashed transparent;
-  border-radius: 0;
-  background: none;
-  cursor: text;
-}
-
-.display:hover {
-  border-bottom-color: var(--line);
-}
-
-/* Em edição: o ::after (cópia invisível do conteúdo) ocupa a mesma célula do
-   grid e dá ao input a largura exata do texto digitado. */
-.wrap {
-  display: inline-grid;
-  max-width: min(70vw, 420px);
-}
-
-.wrap::after,
-.input {
-  grid-area: 1 / 1;
-  font: inherit;
-  letter-spacing: inherit;
-  padding: 0 2px;
-}
-
-.wrap::after {
-  content: attr(data-value);
-  visibility: hidden;
-  white-space: pre;
-}
-
-.input {
-  min-width: 2ch;
-  border: 0;
-  border-bottom: 1px dashed var(--accent);
-  border-radius: 0;
-  background: none;
-  color: inherit;
-  text-align: center;
-}
-
-.input::placeholder {
-  color: var(--stone);
-  opacity: 1;
-}
-
-.input:focus {
-  outline: none;
 }
