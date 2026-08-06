@@ -4,9 +4,9 @@ Gerador de **orçamentos** em PDF para a SF Higienizações (higienização de e
 ar-condicionado), no layout azul-marinho/ciano da referência (`flavis.pdf`). Roda 100% no
 navegador (sem backend, sem banco, sem login). SPA em React instalável como app (PWA) e
 hospedada na Vercel. O usuário edita a identidade da empresa (nome, contato, logo), preenche os
-dados do orçamento (itens de serviço, totais, observações) e **baixa um PDF** — em dois modos: só
-o orçamento, ou o orçamento acrescido do registro fotográfico antes & depois (3 posições
-possíveis para a seção de fotos).
+dados do orçamento (itens de serviço, totais, observações) e **baixa um PDF**; a seção de
+registro fotográfico antes & depois é opcional — sua posição no PDF é escolhida entre 4 opções
+(a primeira, "sem fotos", desliga a inserção de imagens).
 
 ## Comandos
 
@@ -25,9 +25,8 @@ src/
 ├── main.tsx / App.tsx        ← raiz de composição (app shell)
 ├── index.css                 ← reset + tokens (CSS vars) + shell
 ├── shared/                   ← camada comum (especialistas, sem regra de feature)
-│   ├── ui/tokens.ts          ← tokens de design (cor/tipo/espaço) — usados por app E pdf
-│   ├── ui/theme.ts, useTheme.ts ← tema ativo (CSS vars + theme-color), padrão `sanches`
-│   ├── ui/BrandName.tsx      ← nome da empresa clicável, vira campo de edição
+│   ├── ui/tokens.ts          ← tokens de design (paleta única navy/ciano, tipo/espaço)
+│   ├── ui/BrandName.tsx      ← nome da empresa no cabeçalho, só leitura
 │   ├── identity/company.ts, useCompany.ts ← identidade da empresa (nome/contato/logo)
 │   ├── money/currency.ts     ← centavos inteiros: parseBRL/formatBRL/formatQty
 │   ├── text/extenso.ts       ← número → extenso pt-BR
@@ -48,20 +47,20 @@ src/
 ## Dois modos
 
 - `orcamento` — documento fiel à referência, sem fotos.
-- `com-registro` — acrescenta a seção "REGISTRO FOTOGRÁFICO — ANTES & DEPOIS", com 3
+- `com-registro` — acrescenta a seção "REGISTRO FOTOGRÁFICO", com 3
   posicionamentos escolhidos pelo usuário: `anexo` (padrão, nova página), `apos-observacoes`,
   `antes-da-tabela`.
 
 ## Especialistas disponíveis na camada comum (reusar, não reescrever)
 
-- `shared/ui/tokens.ts` + `theme.ts`/`useTheme.ts` — fonte única de cor (tema `sanches`
-  navy/ciano é o padrão) e tipografia/espaçamento; compartilhados pela UI e pelo PDF.
+- `shared/ui/tokens.ts` — fonte única de cor (paleta fixa navy/ciano, sem seleção de tema) e
+  tipografia/espaçamento; compartilhados pela UI (`index.css`) e pelo PDF.
 - `shared/image/resize.ts` — `resizeImageFile(file)` → imagem reduzida (JPEG) pronta pro
   PDF/logo.
 - `shared/identity/company.ts` / `useCompany.ts` — identidade da empresa exibida no orçamento:
   nome, tagline, contato e logo. Vem com o padrão da SF Higienizações, tudo editável e
-  persistido em `localStorage['company']`. **O app não tem nome próprio** — quem aparece sempre
-  é a empresa do usuário.
+  persistido em `localStorage['company']`. Nome pode ficar vazio — a UI cai para `appFallbackName`
+  ("flavis"), mas a geração do PDF exige o nome real preenchido.
 - `shared/money/currency.ts` — `parseBRL`/`formatBRL`/`formatQty` em centavos inteiros (evita
   erro de ponto flutuante nos totais).
 - `shared/text/extenso.ts` — número → extenso pt-BR ("Quatro mil e quinhentos reais").
@@ -77,5 +76,5 @@ src/
 
 - Stack: React + Vite + TypeScript. Sem CSS framework — CSS vars + CSS Modules.
 - Arquivo ativo ≤ ~300 linhas; módulo ≤ ~600. Passou → provavelmente são 2.
-- Nada de banco/rede: todo estado vive em memória na sessão do navegador; identidade e tema
-  persistem em `localStorage`.
+- Nada de banco/rede: todo estado vive em memória na sessão do navegador; a identidade da
+  empresa persiste em `localStorage`.

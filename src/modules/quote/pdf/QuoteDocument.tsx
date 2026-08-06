@@ -1,7 +1,7 @@
 import { Document, Page, View, StyleSheet } from '@react-pdf/renderer'
 import { type Palette } from '@/shared/ui/tokens'
 import { type Company } from '@/shared/identity/company'
-import { type Quote } from '../domain'
+import { blockHasImages, type Quote } from '../domain'
 import { FLOW_GAPS } from './geometry'
 import { Header } from './parts/Header'
 import { InfoCard } from './parts/InfoCard'
@@ -30,7 +30,8 @@ export function QuoteDocument({
   company: Company
   palette: Palette
 }) {
-  const hasPhotos = quote.mode === 'com-registro' && quote.blocks.length > 0
+  const photoBlocks = quote.blocks.filter(blockHasImages)
+  const hasPhotos = quote.photoPlacement !== 'sem-fotos' && photoBlocks.length > 0
 
   return (
     <Document title={`Orçamento ${quote.number}`} author={company.name}>
@@ -39,7 +40,7 @@ export function QuoteDocument({
         <InfoCard quote={quote} palette={palette} />
 
         {hasPhotos && quote.photoPlacement === 'antes-da-tabela' ? (
-          <Photos blocks={quote.blocks} palette={palette} />
+          <Photos blocks={photoBlocks} palette={palette} />
         ) : null}
 
         <View style={styles.gapAfterCard} />
@@ -54,15 +55,16 @@ export function QuoteDocument({
         <View style={styles.gapAfterTable} />
         <Totals quote={quote} palette={palette} />
         <View style={styles.gapAfterTotals} />
-        <Notes notes={quote.notes} palette={palette} />
 
-        {hasPhotos && quote.photoPlacement === 'apos-observacoes' ? (
-          <Photos blocks={quote.blocks} palette={palette} />
+        {hasPhotos && quote.photoPlacement === 'apos-totais' ? (
+          <Photos blocks={photoBlocks} palette={palette} />
         ) : null}
+
+        <Notes notes={quote.notes} palette={palette} />
 
         {hasPhotos && quote.photoPlacement === 'anexo' ? (
           <View break>
-            <Photos blocks={quote.blocks} palette={palette} />
+            <Photos blocks={photoBlocks} palette={palette} />
           </View>
         ) : null}
 

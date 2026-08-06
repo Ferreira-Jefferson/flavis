@@ -227,9 +227,14 @@
   cursor: pointer;
 }
 
-.addBlock:hover {
+.addBlock:hover:not(:disabled) {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+.addBlock:disabled {
+  opacity: 0.5;
+  cursor: default;
 }
 
 .actions {

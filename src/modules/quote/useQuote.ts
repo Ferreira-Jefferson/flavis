@@ -3,7 +3,6 @@ import { resizeImageFile } from '@/shared/image/resize'
 import { setCompany } from '@/shared/identity/company'
 import {
   type Block,
-  type DocMode,
   type ImageAsset,
   type PhotoPlacement,
   type Quote,
@@ -24,10 +23,6 @@ export function useQuote() {
 
   const setField = useCallback((key: MetaField, value: string) => {
     setQuote((q) => ({ ...q, [key]: value }))
-  }, [])
-
-  const setMode = useCallback((mode: DocMode) => {
-    setQuote((q) => ({ ...q, mode }))
   }, [])
 
   const setPhotoPlacement = useCallback((photoPlacement: PhotoPlacement) => {
@@ -144,7 +139,6 @@ export function useQuote() {
     quote,
     busy,
     setField,
-    setMode,
     setPhotoPlacement,
     setDiscountCents,
     addItem,

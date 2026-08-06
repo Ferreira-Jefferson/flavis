@@ -15,9 +15,7 @@ const DEFAULT_NOTES: readonly string[] = [
   'PIX: (11) 98471-4782 | Agendamento mediante confirmação e sinal de 30%.',
 ]
 
-export type DocMode = 'orcamento' | 'com-registro'
-
-export type PhotoPlacement = 'anexo' | 'apos-observacoes' | 'antes-da-tabela'
+export type PhotoPlacement = 'sem-fotos' | 'anexo' | 'apos-totais' | 'antes-da-tabela'
 
 export type Side = 'before' | 'after'
 
@@ -70,7 +68,6 @@ export interface Quote {
   items: ServiceItem[]
   discountCents: number
   notes: string[]
-  mode: DocMode
   photoPlacement: PhotoPlacement
   blocks: Block[]
 }
@@ -88,6 +85,18 @@ export function createItem(): ServiceItem {
 
 export function createBlock(): Block {
   return { id: newId(), label: '', before: [], after: [] }
+}
+
+// Bloco sem nenhuma foto não entra no PDF: molduras vazias só ocupariam espaço (e, no
+// modo `anexo`, gerariam uma página com o título da seção e nada abaixo).
+export function blockHasImages(block: Block): boolean {
+  return block.before.length > 0 || block.after.length > 0
+}
+
+// As legendas "Antes"/"Depois" só fazem sentido quando existe a comparação: com um lado
+// só preenchido, as fotos entram sem legenda (ver `pdf/parts/Photos.tsx`).
+export function isBeforeAfterPair(block: Block): boolean {
+  return block.before.length > 0 && block.after.length > 0
 }
 
 // Soma de dias sobre uma data ISO 'YYYY-MM-DD', sem passar por `Date`/fuso-horário
@@ -121,8 +130,7 @@ export function createQuote(): Quote {
     items: [createItem()],
     discountCents: 0,
     notes: [...DEFAULT_NOTES],
-    mode: 'orcamento',
-    photoPlacement: 'anexo',
+    photoPlacement: 'sem-fotos',
     blocks: [createBlock()],
   }
 }

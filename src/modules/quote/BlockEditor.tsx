@@ -7,6 +7,7 @@ interface Props {
   index: number
   canRemove: boolean
   busy: boolean
+  disabled?: boolean
   onLabelChange: (label: string) => void
   onRemoveBlock: () => void
   onAddImages: (side: Side, files: File[]) => void
@@ -18,6 +19,7 @@ export function BlockEditor({
   index,
   canRemove,
   busy,
+  disabled,
   onLabelChange,
   onRemoveBlock,
   onAddImages,
@@ -28,7 +30,7 @@ export function BlockEditor({
       <header className={styles.blockHead}>
         <span className={styles.blockEyebrow}>Antes e depois {index + 1}</span>
         {canRemove && (
-          <button type="button" className={styles.ghostBtn} onClick={onRemoveBlock}>
+          <button type="button" className={styles.ghostBtn} onClick={onRemoveBlock} disabled={disabled}>
             Remover
           </button>
         )}
@@ -41,6 +43,7 @@ export function BlockEditor({
           value={block.label}
           onChange={(e) => onLabelChange(e.target.value)}
           placeholder="Ex: Cozinha"
+          disabled={disabled}
         />
       </label>
 
@@ -49,7 +52,7 @@ export function BlockEditor({
           block={block}
           side="before"
           label="Antes"
-          disabled={busy}
+          disabled={busy || disabled}
           onAdd={(files) => onAddImages('before', files)}
           onRemove={(id) => onRemoveImage('before', id)}
         />
@@ -57,7 +60,7 @@ export function BlockEditor({
           block={block}
           side="after"
           label="Depois"
-          disabled={busy}
+          disabled={busy || disabled}
           onAdd={(files) => onAddImages('after', files)}
           onRemove={(id) => onRemoveImage('after', id)}
         />

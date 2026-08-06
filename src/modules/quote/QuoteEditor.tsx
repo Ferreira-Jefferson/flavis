@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import { isModuleLoadError, markNeedRefresh } from '@/shared/pwa/updatePrompt'
 import { useCompany } from '@/shared/identity/useCompany'
-import { useTheme } from '@/shared/ui/useTheme'
+import { palette } from '@/shared/ui/tokens'
 import { useQuote } from './useQuote'
-import { ModeSection } from './sections/ModeSection'
 import { CompanySection } from './sections/CompanySection'
 import { QuoteMetaSection } from './sections/QuoteMetaSection'
 import { ItemsSection } from './sections/ItemsSection'
@@ -12,15 +11,14 @@ import { NotesSection } from './sections/NotesSection'
 import { PhotosSection } from './sections/PhotosSection'
 import styles from './quote.module.css'
 
-// Composition root da feature: chama os hooks de estado (useQuote/useCompany/
-// useTheme) e repassa dados/ações como props às 7 seções — nenhuma seção
-// chama hook de estado global diretamente (só UI local, ex. recolher/abrir).
+// Composition root da feature: chama os hooks de estado (useQuote/useCompany)
+// e repassa dados/ações como props às 6 seções — nenhuma seção chama hook de
+// estado global diretamente (só UI local, ex. recolher/abrir).
 export function QuoteEditor() {
   const {
     quote,
     busy,
     setField,
-    setMode,
     setPhotoPlacement,
     setDiscountCents,
     addItem,
@@ -37,10 +35,11 @@ export function QuoteEditor() {
     setLogo,
   } = useQuote()
   const { company, setCompany } = useCompany()
-  const { palette } = useTheme()
   const [generating, setGenerating] = useState(false)
 
-  const canDownload = quote.items.some((i) => i.description.trim().length > 0) && !generating && !busy
+  const hasCompanyName = company.name.trim().length > 0
+  const hasItem = quote.items.some((i) => i.description.trim().length > 0)
+  const canDownload = hasCompanyName && hasItem && !generating && !busy
 
   async function handleDownload() {
     setGenerating(true)
@@ -63,15 +62,27 @@ export function QuoteEditor() {
     }
   }
 
+  // A seção de fotos muda de posição no editor junto com `photoPlacement` — o
+  // formulário reflete onde as fotos vão entrar no PDF (`antes-da-tabela` fica
+  // antes de `ItemsSection`, `apos-totais` entre `TotalsSection` e `NotesSection`;
+  // `anexo` — sempre em nova página, por isso depois de `NotesSection` — e o
+  // padrão `sem-fotos`, sem posição real no PDF, ficam ao final).
+  const photosSection = (
+    <PhotosSection
+      blocks={quote.blocks}
+      photoPlacement={quote.photoPlacement}
+      busy={busy}
+      onPhotoPlacementChange={setPhotoPlacement}
+      onAddBlock={addBlock}
+      onRemoveBlock={removeBlock}
+      onLabelChange={setBlockLabel}
+      onAddImages={addImages}
+      onRemoveImage={removeImage}
+    />
+  )
+
   return (
     <div className={styles.editor}>
-      <ModeSection
-        mode={quote.mode}
-        photoPlacement={quote.photoPlacement}
-        onModeChange={setMode}
-        onPhotoPlacementChange={setPhotoPlacement}
-      />
-
       <CompanySection company={company} onChange={setCompany} onLogoFile={setLogo} busy={busy} />
 
       <QuoteMetaSection
@@ -82,23 +93,17 @@ export function QuoteEditor() {
         onFieldChange={setField}
       />
 
+      {quote.photoPlacement === 'antes-da-tabela' && photosSection}
+
       <ItemsSection items={quote.items} onAdd={addItem} onRemove={removeItem} onUpdate={updateItem} />
 
       <TotalsSection quote={quote} onDiscountChange={setDiscountCents} />
 
+      {quote.photoPlacement === 'apos-totais' && photosSection}
+
       <NotesSection notes={quote.notes} onChange={setNote} onAdd={addNote} onRemove={removeNote} />
 
-      {quote.mode === 'com-registro' && (
-        <PhotosSection
-          blocks={quote.blocks}
-          busy={busy}
-          onAddBlock={addBlock}
-          onRemoveBlock={removeBlock}
-          onLabelChange={setBlockLabel}
-          onAddImages={addImages}
-          onRemoveImage={removeImage}
-        />
-      )}
+      {(quote.photoPlacement === 'anexo' || quote.photoPlacement === 'sem-fotos') && photosSection}
 
       <div className={styles.actions}>
         <button
@@ -111,7 +116,11 @@ export function QuoteEditor() {
         </button>
         {!canDownload && !generating && (
           <span className={styles.hint}>
-            {busy ? 'Processando imagens…' : 'Descreva ao menos um item de serviço.'}
+            {busy
+              ? 'Processando imagens…'
+              : !hasCompanyName
+                ? 'Preencha o nome da empresa em "Identidade da empresa".'
+                : 'Descreva ao menos um item de serviço.'}
           </span>
         )}
       </div>
