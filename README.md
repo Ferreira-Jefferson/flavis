@@ -1,11 +1,13 @@
 # flavis
 
-Gerador de **relatórios de antes e depois** para serviços de reforma.
+Gerador de **orçamentos** em PDF, no layout da SF Higienizações (higienização de estofados e
+ar-condicionado).
 
-Você preenche título, local e descrição, adiciona blocos com 1 a 3 fotos de
-**antes** e 1 a 3 de **depois**, e baixa um **PDF** bem formatado para enviar ao
-cliente. Roda inteiro no navegador — **sem cadastro, sem banco de dados** — e pode
-ser **instalado como app** no celular (PWA).
+Você edita a identidade da empresa (nome, contato, logo), preenche os itens do orçamento,
+totais e observações, e baixa um **PDF** fiel ao layout de referência — em dois modos: só o
+orçamento, ou o orçamento acrescido do **registro fotográfico antes & depois** (com 1 a 3 fotos
+de cada lado por bloco, em 3 posicionamentos possíveis). Roda inteiro no navegador — **sem
+cadastro, sem banco de dados** — e pode ser **instalado como app** no celular (PWA).
 
 ## Rodando localmente
 

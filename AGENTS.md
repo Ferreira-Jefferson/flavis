@@ -1,9 +1,12 @@
 # AGENTS.md — flavis
 
-Gerador de relatórios **antes & depois** para serviços de reforma. Roda 100% no
-navegador (sem backend, sem banco, sem login). SPA em React instalável como app
-(PWA) e hospedada na Vercel. O usuário preenche título/local/descrição, adiciona
-blocos de imagens antes/depois (1–3 cada) e **baixa um PDF** editorial.
+Gerador de **orçamentos** em PDF para a SF Higienizações (higienização de estofados e
+ar-condicionado), no layout azul-marinho/ciano da referência (`flavis.pdf`). Roda 100% no
+navegador (sem backend, sem banco, sem login). SPA em React instalável como app (PWA) e
+hospedada na Vercel. O usuário edita a identidade da empresa (nome, contato, logo), preenche os
+dados do orçamento (itens de serviço, totais, observações) e **baixa um PDF** — em dois modos: só
+o orçamento, ou o orçamento acrescido do registro fotográfico antes & depois (3 posições
+possíveis para a seção de fotos).
 
 ## Comandos
 
@@ -23,32 +26,45 @@ src/
 ├── index.css                 ← reset + tokens (CSS vars) + shell
 ├── shared/                   ← camada comum (especialistas, sem regra de feature)
 │   ├── ui/tokens.ts          ← tokens de design (cor/tipo/espaço) — usados por app E pdf
-│   ├── ui/brand.ts           ← nome do logo: padrão do app + o que o usuário escrever
-│   ├── ui/BrandName.tsx      ← logo clicável que vira campo de edição
+│   ├── ui/theme.ts, useTheme.ts ← tema ativo (CSS vars + theme-color), padrão `sanches`
+│   ├── ui/BrandName.tsx      ← nome da empresa clicável, vira campo de edição
+│   ├── identity/company.ts, useCompany.ts ← identidade da empresa (nome/contato/logo)
+│   ├── money/currency.ts     ← centavos inteiros: parseBRL/formatBRL/formatQty
+│   ├── text/extenso.ts       ← número → extenso pt-BR
 │   └── image/resize.ts       ← redimensiona/comprime imagem no navegador
 └── modules/
-    └── report/               ← ÚNICA feature: montar e exportar o relatório
+    └── quote/                ← ÚNICA feature: montar e exportar o orçamento
         ├── MODULE.md
-        ├── domain.ts         ← tipos Report/Block/ImageAsset + fábricas
-        ├── useReport.ts      ← estado da feature
-        ├── ReportEditor.tsx  ← tela (meta + blocos + ações)
-        ├── BlockEditor.tsx   ← um bloco antes/depois
-        ├── ImageSlots.tsx    ← slots de imagem de um lado (antes|depois)
-        ├── report.module.css ← estilos co-locados da feature
-        └── pdf/              ← geração do PDF (@react-pdf/renderer)
-            ├── fonts.ts
-            ├── ReportDocument.tsx
-            └── generate.tsx  ← monta o PDF e dispara o download
+        ├── domain.ts         ← tipos Quote/ServiceItem/Block/ImageAsset + fábricas + cálculos
+        ├── useQuote.ts       ← estado da feature
+        ├── QuoteEditor.tsx   ← tela (composição das 7 seções)
+        ├── sections/*.tsx    ← Mode, Company, QuoteMeta, Items, Totals, Notes, Photos
+        ├── BlockEditor.tsx, ImageSlots.tsx ← bloco de fotos antes/depois (modo com registro)
+        ├── quote.module.css, sections.module.css ← estilos co-locados
+        └── pdf/              ← geração do PDF (@react-pdf/renderer, fonte base-14 Helvetica)
+            ├── geometry.ts, QuoteDocument.tsx, parts/*.tsx, generate.tsx
 ```
+
+## Dois modos
+
+- `orcamento` — documento fiel à referência, sem fotos.
+- `com-registro` — acrescenta a seção "REGISTRO FOTOGRÁFICO — ANTES & DEPOIS", com 3
+  posicionamentos escolhidos pelo usuário: `anexo` (padrão, nova página), `apos-observacoes`,
+  `antes-da-tabela`.
 
 ## Especialistas disponíveis na camada comum (reusar, não reescrever)
 
-- `shared/ui/tokens.ts` — fonte única de cor/tipografia/espaçamento.
-- `shared/image/resize.ts` — `resizeImageFile(file)` → imagem reduzida (JPEG) pronta pro PDF.
-- `shared/ui/brand.ts` / `useBrand.ts` — nome da marca. O logo mostra `flavis` por padrão
-  e vira campo de edição ao clique; sair sem digitar volta ao padrão. Com um nome escrito,
-  ele substitui o logo, o título da aba, o rodapé/autor do PDF e prefixa o arquivo baixado.
-  **Sem nome escrito, o PDF não leva nome nenhum** — `flavis` fica só na interface.
+- `shared/ui/tokens.ts` + `theme.ts`/`useTheme.ts` — fonte única de cor (tema `sanches`
+  navy/ciano é o padrão) e tipografia/espaçamento; compartilhados pela UI e pelo PDF.
+- `shared/image/resize.ts` — `resizeImageFile(file)` → imagem reduzida (JPEG) pronta pro
+  PDF/logo.
+- `shared/identity/company.ts` / `useCompany.ts` — identidade da empresa exibida no orçamento:
+  nome, tagline, contato e logo. Vem com o padrão da SF Higienizações, tudo editável e
+  persistido em `localStorage['company']`. **O app não tem nome próprio** — quem aparece sempre
+  é a empresa do usuário.
+- `shared/money/currency.ts` — `parseBRL`/`formatBRL`/`formatQty` em centavos inteiros (evita
+  erro de ponto flutuante nos totais).
+- `shared/text/extenso.ts` — número → extenso pt-BR ("Quatro mil e quinhentos reais").
 
 ## Regras de fronteira (verificadas por `npm run lint`)
 
@@ -61,4 +77,5 @@ src/
 
 - Stack: React + Vite + TypeScript. Sem CSS framework — CSS vars + CSS Modules.
 - Arquivo ativo ≤ ~300 linhas; módulo ≤ ~600. Passou → provavelmente são 2.
-- Nada de banco/rede: todo estado vive em memória na sessão do navegador.
+- Nada de banco/rede: todo estado vive em memória na sessão do navegador; identidade e tema
+  persistem em `localStorage`.
