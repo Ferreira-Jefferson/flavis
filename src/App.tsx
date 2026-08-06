@@ -1,4 +1,4 @@
-import { ReportEditor } from '@/modules/report/ReportEditor'
+import { QuoteEditor } from '@/modules/quote/QuoteEditor'
 import { BrandName } from '@/shared/ui/BrandName'
 import { ThemePicker } from '@/shared/ui/ThemePicker'
 import { UpdateBanner } from '@/shared/ui/UpdateBanner'
@@ -25,13 +25,13 @@ export function App() {
           </svg>
           <BrandName />
         </div>
-        <p className="tagline">Relatórios de antes &amp; depois</p>
+        <p className="tagline">Orçamentos profissionais, com ou sem registro fotográfico</p>
         <div className="headerActions">
           <ThemePicker />
         </div>
       </header>
       <main className="appMain">
-        <ReportEditor />
+        <QuoteEditor />
       </main>
     </div>
   )

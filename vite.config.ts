@@ -21,11 +21,11 @@ export default defineConfig({
       injectRegister: null,
       includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
       manifest: {
-        name: 'flavis — antes & depois',
+        name: 'flavis — orçamentos',
         short_name: 'flavis',
-        description: 'Gerador de relatórios de antes e depois para serviços de reforma.',
+        description: 'Gerador de orçamentos em PDF, com registro fotográfico antes e depois opcional.',
         lang: 'pt-BR',
-        theme_color: '#3B5A4E',
+        theme_color: '#0D2B6E',
         background_color: '#F3F3F1',
         display: 'standalone',
         icons: [

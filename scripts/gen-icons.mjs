@@ -1,5 +1,5 @@
 // Gera os PNGs do PWA sem depender de nenhuma lib de imagem.
-// Desenha o mesmo mark do favicon (quadrado eucalipto + moldura branca + divisor)
+// Desenha o mesmo mark do favicon (quadrado navy + moldura branca + divisor ciano)
 // pixel a pixel e codifica um PNG RGBA válido usando só node:zlib.
 import { deflateSync } from 'node:zlib'
 import { writeFileSync, mkdirSync } from 'node:fs'
@@ -9,8 +9,9 @@ import { dirname, join } from 'node:path'
 const OUT = join(dirname(fileURLToPath(import.meta.url)), '..', 'public')
 mkdirSync(OUT, { recursive: true })
 
-const BG = [59, 90, 78, 255] // #3B5A4E
+const BG = [13, 43, 110, 255] // #0D2B6E
 const WHITE = [255, 255, 255, 255]
+const CYAN = [0, 174, 239, 255] // #00AEEF
 
 function insideRounded(x, y, n, r) {
   const cx = Math.min(Math.max(x, r), n - r)
@@ -45,8 +46,8 @@ function draw(n, { maskable = false } = {}) {
       const inFrameHole = x >= m + t && x <= n - m - t && y >= m + t && y <= n - m - t
       if (inFrameBox && !inFrameHole) set(x, y, WHITE)
 
-      // Divisor central (dentro da moldura).
-      if (Math.abs(x - cxBar) <= dividerW / 2 && y >= m && y <= n - m) set(x, y, WHITE)
+      // Divisor central (dentro da moldura) — detalhe ciano.
+      if (Math.abs(x - cxBar) <= dividerW / 2 && y >= m && y <= n - m) set(x, y, CYAN)
     }
   }
   return buf
