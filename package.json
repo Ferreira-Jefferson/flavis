@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Gerador de relatórios de antes e depois para serviços de reforma.",
+  "description": "Gerador de orçamentos em PDF, com registro fotográfico antes e depois opcional.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
@@ -12,7 +12,6 @@
     "gen:icons": "node scripts/gen-icons.mjs"
   },
   "dependencies": {
-    "@fontsource/cormorant": "^5.2.8",
     "@fontsource/inter": "^5.1.0",
     "@react-pdf/renderer": "^4.1.6",
     "react": "^18.3.1",
