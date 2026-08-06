@@ -2,6 +2,7 @@ import { View, Text, Image, StyleSheet } from '@react-pdf/renderer'
 import { type Palette } from '@/shared/ui/tokens'
 import { type Block, type ImageAsset } from '../../domain'
 import { MARGIN_X } from '../geometry'
+import { SectionTitle } from './SectionTitle'
 
 function createStyles(palette: Palette) {
   return StyleSheet.create({
@@ -51,10 +52,18 @@ type Styles = ReturnType<typeof createStyles>
 export function Photos({ blocks, palette }: { blocks: Block[]; palette: Palette }) {
   const styles = createStyles(palette)
   return (
-    <View style={styles.wrapper}>
-      {blocks.map((block, i) => (
-        <BlockView key={block.id} block={block} index={i} styles={styles} />
-      ))}
+    <View>
+      <SectionTitle
+        label="REGISTRO FOTOGRÁFICO — ANTES & DEPOIS"
+        fontSize={13}
+        barHeight={19.8425}
+        palette={palette}
+      />
+      <View style={styles.wrapper}>
+        {blocks.map((block, i) => (
+          <BlockView key={block.id} block={block} index={i} styles={styles} />
+        ))}
+      </View>
     </View>
   )
 }
