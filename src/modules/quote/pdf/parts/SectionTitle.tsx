@@ -28,15 +28,17 @@ export function SectionTitle({
   fontSize,
   barHeight,
   palette,
+  minPresenceAhead = SECTION_TITLE.minPresenceAhead,
 }: {
   label: string
   fontSize: number
   barHeight: number
   palette: Palette
+  minPresenceAhead?: number
 }) {
   const styles = createStyles(palette, barHeight, fontSize)
   return (
-    <View style={styles.row}>
+    <View style={styles.row} minPresenceAhead={minPresenceAhead}>
       <View style={styles.bar} />
       <Text style={styles.label}>{label}</Text>
     </View>

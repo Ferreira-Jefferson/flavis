@@ -23,10 +23,20 @@ function createStyles(palette: Palette) {
   })
 }
 
-export function Notes({ notes, palette }: { notes: string[]; palette: Palette }) {
+export function Notes({
+  notes,
+  palette,
+  minPresenceAhead = 0,
+}: {
+  notes: string[]
+  palette: Palette
+  // Só tem valor quando as observações são o último bloco antes da assinatura — aí elas
+  // exigem espaço para ela também, para as duas descerem juntas de página.
+  minPresenceAhead?: number
+}) {
   const styles = createStyles(palette)
   return (
-    <View wrap={false}>
+    <View wrap={false} minPresenceAhead={minPresenceAhead}>
       <SectionTitle label="OBSERVAÇÕES" fontSize={NOTES.titleFontSize} barHeight={NOTES.barHeight} palette={palette} />
       <View style={styles.wrapper}>
         <View style={styles.panel}>

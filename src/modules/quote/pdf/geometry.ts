@@ -52,6 +52,9 @@ export const INFO_CARD = {
 
 export const SECTION_TITLE = {
   barWidth: 11.33858,
+  // Espaço que precisa sobrar depois da barra para ela ficar na página; abaixo disso a
+  // seção inteira desce, em vez de deixar o título órfão no pé da página.
+  minPresenceAhead: 56,
 } as const
 
 // Gaps de fluxo entre blocos do corpo do documento, medidos no content stream real
@@ -102,7 +105,15 @@ export const NOTES = {
 } as const
 
 export const SIGNATURES = {
-  gapAfterNotes: 5.6693,
+  // Vão entre o fim do conteúdo e a linha de assinatura: é onde a pessoa assina, então
+  // 1,5cm (a mesma medida da margem lateral) em vez dos 5,7pt da referência, que só
+  // funcionavam porque lá o bloco caía sempre no mesmo ponto da página.
+  gapAboveBlock: 42.51969,
+  // Sobra que o último bloco de conteúdo exige para ficar na página: o vão acima mais a
+  // faixa de assinaturas (linha + rótulo 9pt + legenda 8pt ≈ 30pt). Sem isso a
+  // assinatura descia sozinha para uma página em branco enquanto o bloco anterior
+  // ficava na página cheia.
+  tailPresence: 75,
   columnGap: 28.3465,
   labelFontSize: 9,
   captionFontSize: 8,
@@ -115,6 +126,19 @@ export const FOOTER = {
   ribbonHeight: 4.25197,
   line1FontSize: 8,
   line2FontSize: 7,
+} as const
+
+// Margens verticais da página. O rodapé é `fixed` e absoluto, então o fluxo não o
+// enxerga: sem `paddingBottom` o conteúdo passa por baixo dele. E como o cabeçalho só
+// existe na 1ª página, as páginas de continuação começavam coladas na borda — daí o
+// respiro de topo, que a 1ª página cancela com marginTop negativo no cabeçalho.
+export const PAGE = {
+  footerBand: FOOTER.height + FOOTER.ribbonHeight,
+  // Respiro entre a base do conteúdo (e da faixa de assinaturas) e o topo do rodapé.
+  footerClearance: 16,
+  // Respiro no topo de toda página, no lugar de um cabeçalho de continuação: 1cm,
+  // dois terços da margem lateral (1,5cm), o que mantém a proporção da referência.
+  topClearance: 28.3465,
 } as const
 
 // Cor fixa medida no content stream para o corpo da tabela de itens (achado extra, não

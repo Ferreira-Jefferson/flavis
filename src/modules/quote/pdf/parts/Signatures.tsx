@@ -4,8 +4,11 @@ import { MARGIN_X, SIGNATURES } from '../geometry'
 
 function createStyles(palette: Palette) {
   return StyleSheet.create({
+    // `wrap={false}` no bloco: a faixa desce inteira para a página seguinte quando não
+    // couber, em vez de deixar as linhas numa página e os rótulos na outra. O respiro
+    // até o rodapé quem garante é o `paddingBottom` da página (ver geometry.PAGE).
     wrapper: {
-      marginTop: SIGNATURES.gapAfterNotes,
+      marginTop: SIGNATURES.gapAboveBlock,
       paddingHorizontal: MARGIN_X,
       flexDirection: 'row',
     },

@@ -7,6 +7,8 @@ import { SectionTitle } from './SectionTitle'
 function createStyles(palette: Palette) {
   return StyleSheet.create({
     wrapper: { paddingHorizontal: MARGIN_X, paddingTop: 16 },
+    // Blocos a partir do segundo: o respiro de topo já veio do primeiro bloco.
+    restWrapper: { paddingHorizontal: MARGIN_X },
     block: { marginBottom: 18 },
     blockLabel: {
       fontFamily: 'Helvetica-Bold',
@@ -56,34 +58,78 @@ type Styles = ReturnType<typeof createStyles>
 // que teria numa das colunas do par antes/depois.
 const GRID_COLUMNS = 2
 
-export function Photos({ blocks, palette }: { blocks: Block[]; palette: Palette }) {
+export function Photos({
+  blocks,
+  palette,
+  tailPresence = 0,
+}: {
+  blocks: Block[]
+  palette: Palette
+  // Só tem valor quando as fotos são o último bloco antes da assinatura (modo anexo):
+  // o último bloco passa a exigir espaço para ela também, para descerem juntos.
+  tailPresence?: number
+}) {
   const styles = createStyles(palette)
   const visible = blocks.filter(blockHasImages)
   if (visible.length === 0) return null
 
+  const [first, ...rest] = visible
+  const lastIndex = visible.length - 1
+
   return (
     <View>
-      <SectionTitle
-        label="REGISTRO FOTOGRÁFICO"
-        fontSize={13}
-        barHeight={19.8425}
-        palette={palette}
-      />
-      <View style={styles.wrapper}>
-        {visible.map((block, i) => (
-          <BlockView key={block.id} block={block} index={i} styles={styles} />
-        ))}
+      {/* Título e primeiro bloco saem juntos da página: a barra sozinha no pé da folha
+          não diz nada, e como a altura do bloco varia com o número de fotos, agrupar é
+          mais confiável do que reservar espaço fixo com `minPresenceAhead`. */}
+      <View wrap={false}>
+        <SectionTitle
+          label="REGISTRO FOTOGRÁFICO"
+          fontSize={13}
+          barHeight={19.8425}
+          palette={palette}
+        />
+        <View style={styles.wrapper}>
+          <BlockView
+            block={first}
+            index={0}
+            styles={styles}
+            minPresenceAhead={lastIndex === 0 ? tailPresence : 0}
+          />
+        </View>
       </View>
+      {rest.length > 0 ? (
+        <View style={styles.restWrapper}>
+          {rest.map((block, i) => (
+            <BlockView
+              key={block.id}
+              block={block}
+              index={i + 1}
+              styles={styles}
+              minPresenceAhead={i + 1 === lastIndex ? tailPresence : 0}
+            />
+          ))}
+        </View>
+      ) : null}
     </View>
   )
 }
 
 // Duas formas de bloco: par antes/depois (duas colunas legendadas) ou lado único (grid
 // de fotos, sem legenda — não há comparação a rotular nem moldura vazia a preencher).
-function BlockView({ block, index, styles }: { block: Block; index: number; styles: Styles }) {
+function BlockView({
+  block,
+  index,
+  styles,
+  minPresenceAhead = 0,
+}: {
+  block: Block
+  index: number
+  styles: Styles
+  minPresenceAhead?: number
+}) {
   const heading = block.label.trim() || `Registro ${index + 1}`
   return (
-    <View style={styles.block} wrap={false}>
+    <View style={styles.block} wrap={false} minPresenceAhead={minPresenceAhead}>
       <Text style={styles.blockLabel}>{heading}</Text>
       {isBeforeAfterPair(block) ? (
         <View style={styles.sides}>
