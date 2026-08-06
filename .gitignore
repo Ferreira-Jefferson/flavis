@@ -18,3 +18,7 @@ dev-dist/
 # Variáveis de ambiente
 .env
 .env.local
+
+# Artefatos locais (não versionados)
+.claude/
+flavis.pdf
