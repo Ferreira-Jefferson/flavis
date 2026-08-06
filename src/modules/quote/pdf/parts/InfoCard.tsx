@@ -44,6 +44,9 @@ function createStyles(palette: Palette) {
     responsibleValue: {
       fontSize: INFO_CARD.valueFontSize,
       color: palette.body,
+      // -70: largura aproximada do texto "RESPONSÁVEL: " em Helvetica-Bold 10pt (sem
+      // medição exata em flex, ajusta o gap medido no PDF de referência pelo avanço
+      // estimado do rótulo anterior, igual ao mesmo tipo de ajuste em Header.tsx).
       marginLeft: INFO_CARD.responsibleValueLeft - INFO_CARD.responsibleLabelLeft - 70,
     },
   })

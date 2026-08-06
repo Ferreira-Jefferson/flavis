@@ -2,6 +2,7 @@ import { Document, Page, View, StyleSheet } from '@react-pdf/renderer'
 import { type Palette } from '@/shared/ui/tokens'
 import { type Company } from '@/shared/identity/company'
 import { type Quote } from '../domain'
+import { FLOW_GAPS } from './geometry'
 import { Header } from './parts/Header'
 import { InfoCard } from './parts/InfoCard'
 import { SectionTitle } from './parts/SectionTitle'
@@ -14,10 +15,10 @@ import { Footer } from './parts/Footer'
 
 const styles = StyleSheet.create({
   page: { fontFamily: 'Helvetica' },
-  gap: { height: 22.6772 },
-  gapAfterCard: { height: 31.1811 },
-  gapAfterTable: { height: 15.5906 },
-  gapAfterTotals: { height: 21.2598 },
+  gap: { height: FLOW_GAPS.afterSectionBar },
+  gapAfterCard: { height: FLOW_GAPS.afterInfoCard },
+  gapAfterTable: { height: FLOW_GAPS.afterTable },
+  gapAfterTotals: { height: FLOW_GAPS.afterTotals },
 })
 
 export function QuoteDocument({

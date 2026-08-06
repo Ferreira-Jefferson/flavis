@@ -7,7 +7,7 @@ import { HEADER, PAGE_WIDTH } from '../geometry'
 // "ORÇAMENTO" fixo) — a referência tem 2 textos distintos (descrição de ramo aqui,
 // slogan no rodapé) e `Company` só tem 1 campo de subtítulo (`tagline`), que já
 // representa o slogan do rodapé. Ver ACTION-PLAN, "Decisões sem contrato explícito" #1.
-const HEADER_SUBTITLE = 'Higienização de Estofados & Ar-Condicionado'
+const HEADER_SUBTITLE = 'SF Higienização de Estofados & Ar-Condicionado'
 
 function createStyles(palette: Palette) {
   return StyleSheet.create({
@@ -54,6 +54,9 @@ function createStyles(palette: Palette) {
       color: '#FFFFFF',
       fontFamily: 'Helvetica-Bold',
       fontSize: HEADER.brandText.fontSize,
+      // -20: largura aproximada do "F" em Helvetica-Bold 26pt (não há medição exata
+      // disponível em flex, então ajusta o gap medido no PDF de referência pelo avanço
+      // estimado do glifo anterior).
       marginLeft: HEADER.brandText.leftSanches - HEADER.brandText.leftF - 20,
     },
     subtitle: {

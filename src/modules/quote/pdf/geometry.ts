@@ -54,6 +54,20 @@ export const SECTION_TITLE = {
   barWidth: 11.33858,
 } as const
 
+// Gaps de fluxo entre blocos do corpo do documento, medidos no content stream real
+// (ver "Modelo de geometria" no ACTION-PLAN desta feature) — nomeados para não ficarem
+// como números mágicos soltos em `QuoteDocument.tsx`.
+export const FLOW_GAPS = {
+  // Depois do InfoCard/RESPONSÁVEL, antes da barra "DESCRIÇÃO DOS SERVIÇOS".
+  afterInfoCard: 31.1811,
+  // Depois da barra de título de seção, antes do conteúdo (tabela).
+  afterSectionBar: 22.6772,
+  // Depois da tabela de itens, antes dos totais.
+  afterTable: 15.5906,
+  // Depois dos totais, antes da seção "OBSERVAÇÕES".
+  afterTotals: 21.2598,
+} as const
+
 export const TABLE = {
   width: 524.4094,
   // Larguras de coluna, na ordem ITEM · DESCRIÇÃO · QTD · UN. · VL. UNIT. · VL. TOTAL.
